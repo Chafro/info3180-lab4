@@ -9,3 +9,6 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+.flex{
+	padding: 20px;
+}

@@ -5,9 +5,9 @@
 
 {% include 'flash_messages.html' %}
 <div class='flexboxx'> 
-{% for image in images: %}
+{% for fil in file: %}
     <div class='flex'> 
-        <img src = "{{ url_for('static',filename= "uploads/" + image ) }}" height="200",width="200">  </img> 
+        <img src = "{{url_for('static', filename = 'uploads/' + fil)}}" alt = "{{fil}}" class= "image" height="300" width="300">
     </div>
     <br>
 {% endfor%}

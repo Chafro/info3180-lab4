@@ -38,18 +38,29 @@ def upload():
         return render_template('upload.html', form = Upload)
 
     # Validate file upload on submit
+    Upload = UploadForm()
     if request.method == 'POST':
         # Get file data and save to your uploads folder
         file = Upload.file.data
         description = Upload.description.data
         filename = secure_filename(file.filename)
-        print(filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 
         flash('File Saved', 'success')
         return redirect(url_for('home'))
 
     return render_template('upload.html')
+
+def get_uploaded_images():
+    if not session.get('logged_in'):
+        abort(401)
+    rootdir= os.getcwd()
+    print(rootdir)
+    filenames=[]
+    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
+        for file in files:
+             filenames.append(file)
+    return filenames[1:]
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -71,15 +82,7 @@ def files():
          abort(401)
     return render_template('files.html', file = get_uploaded_images())
 
-def get_uploaded_images():
-    if not session.get('logged_in'):
-        abort(401)
-    rootdir= os.getcwd()
-    filenames=[]
-    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
-        for file in files:
-             filenames.append(os.path.join(subdir, file).split('/')[-1])
-    return filenames
+
 
 @app.route('/logout')
 def logout():
